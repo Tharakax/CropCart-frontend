@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, Route, useNavigate } from 'react-router-dom';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import ViewOneProduct from './ViewOneProduct.jsx';
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
@@ -35,15 +36,14 @@ const ManageProducts = () => {
 
   const viewOne = async (productId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/product/${productId}`);
-      console.log('Product details:', response.data);
+      
       
       // Navigate to product details page with the product data
-      navigate(`/admin/products/${productId}`, { state: { product: response.data } });
+      navigate("/admin/products/getone",{
+        state: { productId }
+      });
       
-      // Alternatively, you could open a modal with the product details:
-      // setSelectedProduct(response.data);
-      // setShowModal(true);
+    
     } catch (error) {
       console.error('Error fetching product details:', error);
       // You might want to show an error message to the user
@@ -154,6 +154,7 @@ const ManageProducts = () => {
                       >
                         View
                       </button>
+                      
                       <button
                       onClick ={() => deleteProduct(product._id)}
                       className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
@@ -174,6 +175,7 @@ const ManageProducts = () => {
         </div>
         
       )}
+      
      
     </div>
     

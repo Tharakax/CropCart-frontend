@@ -7,6 +7,7 @@ import './App.css'
 import LoginPage from './pages/loginpage'
 import AdminDashboard from './pages/admindashboard'
 import Testing from './pages/testing'
+import ViewOneProduct from './pages/admin/ViewOneProduct'
 
 function App() {
 
@@ -18,6 +19,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/admin/*" element={<AdminDashboard />} />
         <Route path="/testing" element={<Testing />} />
+        <Route path="/products/getone" element={<ViewOneProduct />} />
+
         {/* Add more routes as needed */}
 
       </Routes>
