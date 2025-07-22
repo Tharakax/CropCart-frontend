@@ -74,7 +74,7 @@ const AddProduct = () => {
 
       
       const token = localStorage.getItem('token');
-      const response = await axios.post("http://localhost:3000/api/product/", productData ,{
+      const response = await axios.post(import.meta.env.VITE_BACKEND_URL+"/api/product/", productData ,{
         headers:{
           Authorization: "Bearer " + token
         }

@@ -24,7 +24,7 @@ const ViewOneProduct = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3000/api/product/${productId}`, {
+        const response = await axios.get(import.meta.env.VITE_BACKEND_URL+`/api/product/${productId}`, {
           headers: {
             Authorization: "Bearer " + token
           }
@@ -37,9 +37,28 @@ const ViewOneProduct = () => {
         toast.error('Failed to load product details');
       }
     };
-
+    
     fetchProduct();
-  }, [productId, navigate]);
+    setLoading(false)
+  },[loading]);
+
+
+  async function viewOnetoedit (id){
+    try {
+      
+      
+      // Navigate to product details page with the product data
+      navigate("/admin/products/edit",{
+        state: { id }
+      });
+      
+    
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+      // You might want to show an error message to the user
+      setError('Failed to load product details');
+    }
+  };
 
   if (loading) {
     return (
@@ -218,12 +237,12 @@ const ViewOneProduct = () => {
               </div>
 
               <div className="mt-6 flex space-x-4">
-                <Link
-                  to={`/admin/products/edit/${product._id}`}
+                <button
+                    onClick ={() =>{viewOnetoedit(productId)}}
                   className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 shadow-md font-medium"
                 >
                   Edit Product
-                </Link>
+                </button>
                 <button
                   onClick={() => navigate(-1)}
                   className="px-6 py-3 border-2 border-green-300 text-green-700 rounded-lg hover:bg-green-50 transition-colors duration-200 shadow-md font-medium"

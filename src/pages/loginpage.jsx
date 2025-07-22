@@ -13,17 +13,22 @@ export default function LoginPage() {
     console.log("Password:", password);
 
 
-    axios.post("http://localhost:3000/api/user/login", {
+    axios.post(import.meta.env.VITE_BACKEND_URL+"/api/user/login", {
         email: email,
         password: password,
         }).then((response) => {
           console.log("Login successful:");
           localStorage.setItem("token", response.data.token);
           toast.success("Login successful!");
+
           
           console.log("Response data:", response.data.user.role);
-          if(response.data.user.role === "customer") {
+          if(response.data.user.role === "admin") {
             navigate("/admin/");
+          }else if(response.data.user.role === "farmer") {
+            navigate("/farmer/dashboard");
+          }else{
+            navigate("/home");
           }
         }).catch((error) => {
           console.error("Login failed:", error);

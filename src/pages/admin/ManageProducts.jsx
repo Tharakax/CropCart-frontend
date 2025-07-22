@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import ViewOneProduct from './ViewOneProduct.jsx';
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
@@ -57,7 +56,7 @@ const ManageProducts = () => {
       if (!token) {
         return toast.error('You must be logged in to delete a product');
       }
-      const response = await axios.delete(`http://localhost:3000/api/product/${id}`,
+      const response = await axios.delete(import.meta.env.VITE_BACKEND_URL+`/api/product/${id}`,
         {
           headers: {
           Authorization: "Bearer " + token

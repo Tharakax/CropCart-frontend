@@ -3,6 +3,7 @@ import { Link, Routes, Route, Outlet } from 'react-router-dom';
 import ManageProducts from './admin/ManageProducts.jsx'; // Import your ManageProducts component
 import AddProducts from './admin/AddProducts.jsx';
 import ViewOneProduct from './admin/ViewOneProduct.jsx';
+import EditProduct from './admin/EditProduct.jsx';
 
 const Dashboard = () => {
   return (
@@ -154,7 +155,8 @@ const Dashboard = () => {
               </div>
             } />
             <Route path="/products/addproducts" element={<AddProducts />} />
-                    <Route path="/products/getone" element={<ViewOneProduct />} />
+            <Route path="/products/getone" element={<ViewOneProduct />} />
+            <Route path="/products/edit" element={<EditProduct />} />
 
 
       
