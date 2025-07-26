@@ -219,11 +219,11 @@ export default function OneProduct() {
                         <div className="space-y-2">
                             <div className="flex items-baseline space-x-3">
                                 <span className="text-4xl font-bold text-gray-900">
-                                    ${product.price.toFixed(2)}
+                                    Rs. {product.price.toFixed(2)}
                                 </span>
                                 {product.displayprice && product.displayprice !== product.price && (
                                     <span className="text-xl text-gray-500 line-through">
-                                        ${product.displayprice.toFixed(2)}
+                                        Rs.{product.displayprice.toFixed(2)}
                                     </span>
                                 )}
                                 <span className="text-gray-600">per {product.unit}</span>

@@ -101,20 +101,20 @@ const handleUpload = async () => {
     }
 
     const categories = [
-    'vegetables',
-    'fruits',
-    'leafy-greens',
-    'root-vegetables',
-    'berries',
-    'tropical-fruits',
-    'organic',
-    'exotic'
+        'vegetables',
+        'fruits',
+        'leafy-greens',
+        'root-vegetables',
+        'berries',
+        'animal-products',
+        'dairy-products',
+        'meats',
   ];
     const units = [
       'kg',
       'g',
       'lb',
-      'oz',
+     
       'pcs',
       'bunch',
       'dozen'

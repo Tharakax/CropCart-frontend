@@ -252,7 +252,7 @@ const EditProduct = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-green-700 mb-2">Price ($)</label>
+                <label className="block text-sm font-semibold text-green-700 mb-2">Price (LKR)</label>
                 <input
                   type="number"
                   step="0.01"
@@ -417,7 +417,7 @@ const EditProduct = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-yellow-700 mb-2">Display Price ($)</label>
+                  <label className="block text-sm font-semibold text-yellow-700 mb-2">Display Price (LKR)</label>
                   <input
                     type="number"
                     step="0.01"

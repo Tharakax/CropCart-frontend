@@ -20,9 +20,9 @@ export default function ProductsPage() {
         { value: 'leafy-greens', label: 'Leafy Greens' },
         { value: 'root-vegetables', label: 'Root Vegetables' },
         { value: 'berries', label: 'Berries' },
-        { value: 'tropical-fruits', label: 'Tropical Fruits' },
-        { value: 'organic', label: 'Organic' },
-        { value: 'exotic', label: 'Exotic' }
+        { value: 'animal-products', label: 'Animal Products' },
+        { value: 'dairy-products', label: 'Dairy Products' },
+        { value: 'meats', label: 'Meats' }
     ];
 
     useEffect(() => {
@@ -177,7 +177,7 @@ export default function ProductsPage() {
                                 <div className="space-y-4">
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            Min Price ($)
+                                            Min Price (Rs)
                                         </label>
                                         <input
                                             type="number"
@@ -189,7 +189,7 @@ export default function ProductsPage() {
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            Max Price ($)
+                                            Max Price (Rs)
                                         </label>
                                         <input
                                             type="number"
@@ -276,11 +276,11 @@ export default function ProductsPage() {
                                             <div className="mb-4">
                                                 <div className="flex items-baseline space-x-2">
                                                     <span className="text-2xl font-bold text-gray-900">
-                                                        ${product.price ? product.price.toFixed(2) : '0.00'}
+                                                        Rs. {product.price ? product.price.toFixed(2) : '0.00'}
                                                     </span>
                                                     {product.displayPrice && product.displayPrice !== product.price && (
                                                         <span className="text-sm text-gray-500 line-through">
-                                                            ${product.displayPrice.toFixed(2)}
+                                                            Rs. {product.displayPrice.toFixed(2)}
                                                         </span>
                                                     )}
                                                 </div>

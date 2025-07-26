@@ -3,12 +3,14 @@ import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, Heart } from 'lucide-react
 
 import { addToCart , removeFromCart , getCart , updateQuantity } from '../../utils/cart.js';
 import { useEffect } from 'react';
+import axios from 'axios';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function Cart() {
   const [cart, setCart] = useState([]);
   const [savedItems, setSavedItems] = useState([]);
   const [loading, setLoading] = useState(true);
-
+const Navigate = useNavigate();
   // Load cart data on component mount
   useEffect(() => {
     const loadCart = () => {
@@ -33,8 +35,8 @@ export default function Cart() {
   // Calculate totals
   const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   const tax = subtotal * 0.08; // 8% tax
-  const shipping = subtotal > 100 ? 0 : 15; // Free shipping over $100
-  const discount = subtotal > 200 ? subtotal * 0.05 : 0; // 5% discount over $200
+  const shipping = subtotal > 2000 ? 0 : 15; // Free shipping over Rs. 2000
+  const discount = subtotal > 3000 ? subtotal * 0.05 : 0; // 5% discount over Rs. 3000
   const total = subtotal + tax + shipping - discount;
 
   // Cart actions
@@ -109,7 +111,46 @@ export default function Cart() {
       console.error("Error clearing cart:", error);
     }
   };
+  async function handleCheckout () {
+  try {
+    // Prepare order data from cart
+    const orderData = {
+      items: cart.map(item => ({
+        productId: item.productId,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image,
+        description: item.description || ''
+      })),
+      subtotal: subtotal,
+      tax: tax,
+      shipping: shipping,
+      discount: discount,
+      total: total,
+      status: 'pending',
+      contactPhone: '123-456-7890', // Add contact phone if needed
+      contactEmail: 'user@gmail.com', // Add contact email if needed
+      paymentMethod: 'credit_card', // Default to card
 
+    };
+
+    localStorage.setItem("orderData", JSON.stringify(orderData));
+    const response = await axios.post(import.meta.env.VITE_BACKEND_URL+"/api/order", orderData);
+    
+    // If successful, clear the cart and redirect to order confirmation
+    if (response.data.success) {
+      handleClearCart();
+      Navigate(`/shipping/${response.data.order._id}`);
+    } else {
+      console.error('Checkout failed:', response.data.message);
+      // Show error message to user
+    }
+  } catch (error) {
+    console.error('Error during checkout:', error);
+    // Show error message to user
+  }
+};
   // Load saved items on mount
   useEffect(() => {
     try {
@@ -131,7 +172,9 @@ export default function Cart() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
-              <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors">
+              <button 
+              onClick={() => Navigate("/products")}
+              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors">
                 <ArrowLeft size={20} />
                 <span className="hidden sm:inline">Continue Shopping</span>
               </button>
@@ -153,7 +196,9 @@ export default function Cart() {
             <ShoppingBag size={80} className="mx-auto text-gray-300 mb-6" />
             <h2 className="text-2xl font-semibold text-gray-900 mb-2">Your cart is empty</h2>
             <p className="text-gray-500 mb-8">Looks like you haven't added any items to your cart yet.</p>
-            <button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+            <button 
+              onClick={() => Navigate("/products")}
+              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
               Start Shopping
             </button>
           </div>
@@ -249,10 +294,10 @@ export default function Cart() {
 
                         <div className="flex flex-col items-end space-y-2">
                           <p className="text-lg font-semibold text-gray-900">
-                            ${(item.price * item.quantity).toFixed(2)}
+                            Rs. {(item.price * item.quantity).toFixed(2)}
                           </p>
                           <p className="text-sm text-gray-500">
-                            ${item.price.toFixed(2)} each
+                            Rs. {item.price.toFixed(2)} each
                           </p>
                         </div>
                       </div>
@@ -277,7 +322,7 @@ export default function Cart() {
                             className="w-full h-32 object-cover rounded-md mb-3"
                           />
                           <h4 className="font-medium text-gray-900 mb-1">{item.name}</h4>
-                          <p className="text-sm text-gray-500 mb-2">${item.price.toFixed(2)}</p>
+                          <p className="text-sm text-gray-500 mb-2">Rs. {item.price.toFixed(2)}</p>
                           <button
                             onClick={() => handleMoveToCart(item)}
                             className="w-full bg-blue-600 text-white py-2 rounded-md text-sm hover:bg-blue-700 transition-colors"
@@ -303,13 +348,13 @@ export default function Cart() {
                   <div className="space-y-3">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Subtotal ({totalItems} items):</span>
-                      <span className="font-medium">${subtotal.toFixed(2)}</span>
+                      <span className="font-medium">Rs. {subtotal.toFixed(2)}</span>
                     </div>
                     
                     {discount > 0 && (
                       <div className="flex justify-between text-sm">
                         <span className="text-green-600">Discount (5%):</span>
-                        <span className="text-green-600 font-medium">-${discount.toFixed(2)}</span>
+                        <span className="text-green-600 font-medium">-Rs. {discount.toFixed(2)}</span>
                       </div>
                     )}
                     
@@ -319,30 +364,34 @@ export default function Cart() {
                         {shipping === 0 ? (
                           <span className="text-green-600">Free</span>
                         ) : (
-                          `$${shipping.toFixed(2)}`
+                          `Rs.${shipping.toFixed(2)}`
                         )}
                       </span>
                     </div>
                     
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Tax:</span>
-                      <span className="font-medium">${tax.toFixed(2)}</span>
+                      <span className="font-medium">Rs. {tax.toFixed(2)}</span>
                     </div>
                     
                     <div className="border-t pt-3">
                       <div className="flex justify-between">
                         <span className="text-lg font-semibold text-gray-900">Total:</span>
-                        <span className="text-lg font-semibold text-gray-900">${total.toFixed(2)}</span>
+                        <span className="text-lg font-semibold text-gray-900">Rs. {total.toFixed(2)}</span>
                       </div>
                     </div>
                   </div>
 
                   <div className="mt-6 space-y-3">
-                    <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                    <button 
+                    onClick={() => {handleCheckout()}}
+                    className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
                       Proceed to Checkout
                     </button>
                     
-                    <button className="w-full bg-gray-100 text-gray-900 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                    <button 
+                    onClick={() => {Navigate("/products")}}
+                    className="w-full bg-gray-100 text-gray-900 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors">
                       Continue Shopping
                     </button>
                   </div>
@@ -350,8 +399,8 @@ export default function Cart() {
                   {subtotal < 100 && (
                     <div className="mt-4 p-4 bg-blue-50 rounded-lg">
                       <p className="text-sm text-blue-800">
-                        <span className="font-medium">Free shipping</span> on orders over $100.
-                        Add <span className="font-medium">${(100 - subtotal).toFixed(2)}</span> more to qualify!
+                        <span className="font-medium">Free shipping</span> on orders over Rs. 2000.
+                        Add <span className="font-medium">Rs. {(2000 - subtotal).toFixed(2)}</span> more to qualify!
                       </p>
                     </div>
                   )}
